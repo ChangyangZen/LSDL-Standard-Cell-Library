@@ -1,0 +1,24 @@
+# L6 — 11T LSDL physical-support cells (SIGN-OFF)
+date: 2026-05-27T04:48Z
+Row contract (constants, from signed-off lsdl_inv_x1): H=6.16um; NWELL y[2.22,6.42];
+  LVPWELL y[0,2.22]; VPWR rail y[5.47,6.40]; VGND y[-0.24,0.69]; DUALGATE/FET5VDEF
+  span boundary in X, full row in Y. Wells/rails span [0,W], abut at boundary pitch.
+
+Cells: lsdl_tap_11t(1.68) lsdl_endcap_11t(1.12) lsdl_fill_11t_{1:0.56,2:1.12,4:2.24}
+Standalone DRC: tap/endcap/fill_2/fill_4 = 0 cell-level.
+  fill_11t_1 (1 track) has NW.1a_MV + DV.5 = nwell/dualgate MIN-WIDTH at 0.56um;
+  ABUTMENT-ONLY (never placed alone) -> resolves in every row context (proven).
+
+Seam regression (official KLayout DRC, all 0 cell-level):
+  A tap|inv  B inv|tap  C tap|inv|tap  D endcap|inv|endcap  E fill1|inv|fill1
+  F tap|fill1  G fill2|inv  H inv|fill4  I fill1|endcap  J endcap|tap|fill1|inv|fill2|tap|endcap
+  -> DF.13_MV/DF.14_MV also vanish once a tap is in the row.
+
+Step 10 LVS: extract C (tap|inv|tap) + Netgen vs hand-source ->
+  'Netlists match uniquely' (11 dev, 10 nets), PMOS bulk=VPWR, NMOS bulk=VGND.
+  (Only the L7 top-level PORT-declaration formality remains; network matches.)
+
+Key fixes vs the throwaway tap: row-contract well y-ranges (no overhang),
+  DUALGATE spans the boundary in X (continuous row band), and the shared
+  post-process rectangularizes NWELL/LVPWELL to clean bands (kills the NW.2a
+  seam notch from lclayout's jagged per-FET well boxes).

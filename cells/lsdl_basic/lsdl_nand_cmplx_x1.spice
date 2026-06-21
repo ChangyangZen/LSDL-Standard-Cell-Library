@@ -1,0 +1,39 @@
+* lsdl_nand_cmplx_x1 — LSDL complex-output (NAND-form) gate, X1.
+* Paper Fig. 3a: TWO eval trees (dyn1, dyn2), each with own precharge + foot;
+* NAND-form predriver combines them: out_b = !(dyn1 & dyn2).
+* Tree i discharges dyn_i when its input is 1, so dyn_i = !(input_i).
+*   out_b = !(dyn1 & dyn2) = !(!A & !B) = A + B  ;  Out = !out_b = !(A + B).
+* => function Out = !(A + B)  (NOR2 logic, built via the complex predriver).
+* GF180MCU 5V pfet_05v0 / nfet_05v0.
+
+.SUBCKT lsdl_nand_cmplx_x1 A B Clk Out VPWR VGND
+
+* --- Tree 1 (single NMOS, gate A) ---
+XPRE1     dyn1       Clk   VPWR       VPWR  pfet_05v0  W=1.0u  L=0.5u
+XN1       dyn1       A     foot1      VGND  nfet_05v0  W=0.8u  L=0.6u
+XFOOT1    foot1      Clk   VGND       VGND  nfet_05v0  W=0.8u  L=0.6u
+
+* --- Tree 2 (single NMOS, gate B) ---
+XPRE2     dyn2       Clk   VPWR       VPWR  pfet_05v0  W=1.0u  L=0.5u
+XN2       dyn2       B     foot2      VGND  nfet_05v0  W=0.8u  L=0.6u
+XFOOT2    foot2      Clk   VGND       VGND  nfet_05v0  W=0.8u  L=0.6u
+
+* --- NAND-form predriver: out_b = !(dyn1 & dyn2) ---
+* pullup: 2 PMOS in parallel (out_b high if dyn1 low OR dyn2 low)
+XPDRVP1   out_b      dyn1  VPWR       VPWR  pfet_05v0  W=3.0u  L=0.5u
+XPDRVP2   out_b      dyn2  VPWR       VPWR  pfet_05v0  W=3.0u  L=0.5u
+* pulldown: 2 NMOS in series via header (out_b low only if dyn1 AND dyn2 high)
+XPDRVN1   out_b      dyn1  midn       VGND  nfet_05v0  W=0.4u  L=0.6u
+XPDRVN2   midn       dyn2  hdr_src    VGND  nfet_05v0  W=0.4u  L=0.6u
+XHDR      hdr_src    Clk   VGND       VGND  nfet_05v0  W=0.8u  L=0.6u
+
+* --- Feedback keeper + cut feedback (output latch) ---
+XFBP      cut_fb_src Out   VPWR       VPWR  pfet_05v0  W=0.5u  L=0.5u
+XCUTFB    out_b      Clk   cut_fb_src VPWR  pfet_05v0  W=0.5u  L=0.5u
+XFBN      out_b      Out   VGND       VGND  nfet_05v0  W=0.5u  L=0.6u
+
+* --- Output driver (out_b -> Out) ---
+XODRVP    Out        out_b VPWR       VPWR  pfet_05v0  W=1.5u  L=0.5u
+XODRVN    Out        out_b VGND       VGND  nfet_05v0  W=0.9u  L=0.6u
+
+.ENDS lsdl_nand_cmplx_x1

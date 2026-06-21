@@ -1,0 +1,54 @@
+2026-05-27 05:26:04        tech_util     INFO: Loading tech file: /mada/users/czeng14/projects/brainstorm/domino/lsdl_lib/librecell/tech_gf180mcu/librecell_tech.py
+2026-05-27 05:26:04       standalone     INFO: Placement algorithm: SMTPlacer
+2026-05-27 05:26:04       standalone     INFO: Signal routing algorithm: DijkstraRouter
+2026-05-27 05:26:04       standalone     INFO: Create layout for cell 'lsdl_inv_x1' from '/mada/users/czeng14/projects/brainstorm/domino/lsdl_lib/librecell/lsdl_inv_x1.sp'.
+2026-05-27 05:26:04       standalone     INFO: Load netlist: /mada/users/czeng14/projects/brainstorm/domino/lsdl_lib/librecell/lsdl_inv_x1.sp
+2026-05-27 05:26:04       standalone     INFO: Supply net: VPWR
+2026-05-27 05:26:04       standalone     INFO: Ground net: VGND
+2026-05-27 05:26:04       standalone     INFO: Initialize placer
+2026-05-27 05:26:04       standalone     INFO: Find next transistor placement
+2026-05-27 05:26:04       smt_placer     INFO: Try cell width 6
+2026-05-27 05:26:05       smt_placer     INFO: Run SMT optimizer (Z3)
+2026-05-27 05:26:05       smt_placer     INFO: Is satisfiable: False
+2026-05-27 05:26:05       smt_placer     INFO: Placement of width 6 is impossible
+2026-05-27 05:26:05       smt_placer     INFO: Try cell width 7
+2026-05-27 05:26:05       smt_placer     INFO: Run SMT optimizer (Z3)
+2026-05-27 05:26:06       smt_placer     INFO: Is satisfiable: True
+2026-05-27 05:26:06       standalone     INFO: Cell placement:
+
+(VPWR, OUT_B, OUT) |       None       | (VPWR, DYN, OUT_B) | (OUT_B, CLK, CUT_FB_SRC) | (CUT_FB_SRC, OUT, VPWR) | (VPWR, CLK, DYN) |       None      
+(OUT, OUT_B, VGND) | (VGND, OUT, OUT_B) | (OUT_B, DYN, HDR_SRC) | (HDR_SRC, CLK, VGND) |       None       | (VGND, CLK, FOOT_TOP) | (FOOT_TOP, A, DYN)
+
+2026-05-27 05:26:08           router     INFO: Start routing
+2026-05-27 05:26:08       pathfinder     INFO: Start global routing.
+2026-05-27 05:26:09       pathfinder     INFO: Routing iteration 0
+2026-05-27 05:26:10       pathfinder     INFO: Routing iteration 1
+2026-05-27 05:26:11       pathfinder     INFO: Routing iteration 2
+2026-05-27 05:26:12       pathfinder     INFO: Routing iteration 3
+2026-05-27 05:26:12       pathfinder     INFO: Global routing done in 3 iterations
+2026-05-27 05:26:12       pathfinder     INFO: Run single-net optimizations.
+2026-05-27 05:26:14       standalone     INFO: Routing successful.
+2026-05-27 05:26:14       standalone     INFO: Insert well-taps.
+2026-05-27 05:26:19       standalone  WARNING: Failed to route well-taps. Routing graph is not connected..
+2026-05-27 05:26:19       standalone  WARNING: Well-taps could not be routed.
+2026-05-27 05:26:19      drc_cleaner     INFO: SMT solver: Z3Solver
+2026-05-27 05:26:20      drc_cleaner  WARNING: Fixed shapes are excluded from spacing rules.
+2026-05-27 05:26:21      drc_cleaner     INFO: Invoke SMT solver
+2026-05-27 05:26:21      drc_cleaner     INFO: SMT result: UNSAT
+2026-05-27 05:26:21      drc_cleaner    ERROR: UNSAT: Constraints not satisfiable.
+2026-05-27 05:26:21       standalone    ERROR: Minimum area fixing failed!
+2026-05-27 05:26:21       standalone     INFO: Running LVS check on cell: lsdl_inv_x1
+2026-05-27 05:26:21       standalone     INFO: LVS result: SUCCESS
+2026-05-27 05:26:21     magic_writer     INFO: Number of layers: 20
+2026-05-27 05:26:21     magic_writer     INFO: Processing cell: lsdl_inv_x1
+2026-05-27 05:26:21     magic_writer     INFO: Writing MAG file: /mada/users/czeng14/projects/brainstorm/domino/lsdl_lib/librecell/out/lsdl_inv_x1.mag
+2026-05-27 05:26:21       lef_writer     INFO: Write LEF: /mada/users/czeng14/projects/brainstorm/domino/lsdl_lib/librecell/out/lsdl_inv_x1.lef
+2026-05-27 05:26:21       gds_writer     INFO: Write GDS: /mada/users/czeng14/projects/brainstorm/domino/lsdl_lib/librecell/out/lsdl_inv_x1.gds
+2026-05-27 05:26:21     oasis_writer     INFO: Write OASIS: /mada/users/czeng14/projects/brainstorm/domino/lsdl_lib/librecell/out/lsdl_inv_x1.oas
+2026-05-27 05:26:21       standalone     INFO: Done (Total duration: 0:00:16.317519)
+GF180 standard cell configuration: TARGETVOLTAGE=5V TRACKS=11 DNWELL=False
+Minimum Spacing 250 for pdiff_contact too small because of pdiffusion, minimum should be 500(=360+2*70) Fixing minimum_spacing
+Minimum Spacing 250 for ndiff_contact too small because of ndiffusion, minimum should be 500(=360+2*70) Fixing minimum_spacing
+grid_offset_y: 42
+grid_offset_x: 560
+routing_grid_pitch_x: 560

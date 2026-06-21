@@ -1,0 +1,13 @@
+# SIGN-OFF: LSDL NAND2 via LibreCell — 0 cell-level DRC, block LVS match, 5V-marked
+date: 2026-05-27T19:13Z
+12 FETs (5 PMOS + 7 NMOS) = INV + series-NMOS XNB; pins A1 A2 Clk Out VPWR VGND;
+  new internal charge-share node nint (between XNA/XNB).
+Flow: gen_and_drc.sh lsdl_nand2_x1 11 (routed FIRST TRY at 11T) -> librecell_postprocess
+  -> mk_ports_gds (auto-detect 6 pins) -> declare_magic_ports -> Netgen.
+DRC: 0 cell-level (chip-level DF.13/14 deferred). Seams tap|nand2|tap, fill2|nand2|fill2 = 0.
+Block LVS (tap|nand2|tap): 'Circuits match uniquely', 12 devices, 12 nets, bulk=VPWR/VGND, no port errors.
+LEF pins corrected (A1/A2/Clk INPUT, Out OUTPUT, VPWR POWER, VGND GROUND).
+
+*** GENERALIZATION CONFIRMED: ZERO new tech patches. Only generic script edits:
+    mk_ports_gds.py auto-detect pin positions; fix_lef_pins.py input-name pattern;
+    build_support.py combo accepts any logic cell. The flow produces a library, not a one-off.

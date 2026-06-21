@@ -1,0 +1,5 @@
+# regenerable / large — not part of the frozen deliverables
+venv/
+out/
+*_verbose.log
+*.oas

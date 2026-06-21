@@ -1,0 +1,28 @@
+# SIGN-OFF: LSDL inverter via LibreCell — 0 cell-level DRC, LVS clean, 5V-marked
+date: 2026-05-27T03:40Z
+flow: lclayout (TRACKS=11, 3-track gate pitch, --placer smt) -> librecell_postprocess.py (DUALGATE+FET5VDEF)
+DRC: 0 cell-level; 4 chip-level tap rules (DF.13/14_MV) deferred to filler/endcap
+LVS: SUCCESS (lclayout internal, vs lsdl_inv_x1.sp); markers are non-electrical
+progression: 33 -> 16 (CO.6a) -> 12 (DF.12 implants) -> 10 (well clip) -> 6 (via1 min-area) -> 0 (3-track PL.5) -> 0 +5V markers
+
+## Netgen signoff LVS (Magic ext2spice + GF180 netgen setup)
+Extracted: 11 devices = 5 pfet_05v0 + 6 nfet_05v0; W/L all match hand-source; net names intact.
+DEVICE-LEVEL MATCH (count, types, W/L). Net count 12 vs 10:
+  the 2 extra extracted nets are bulk ties not made in-cell:
+    - nwell (w_0_616#) NOT connected to VPWR  (no n-well tap)
+    - substrate (VSUBS) NOT connected to VGND (no p-substrate tap)
+lclayout's well-tap insertion failed to route -> tapless cell (stock GF180 convention).
+Labeling nwell=VPWR fails (creates VPWR + VPWR_uq0): proves no physical tie.
+RESOLUTION: in-cell taps OR block-level LVS with filler/tap cells (decision pending).
+
+## Block-level LVS validation (Option 1: filler-based taps) — VALIDATED
+Built throwaway 11T tap cell (N+ nwell->VPWR, P+ sub->VGND), abutted tap|inv|tap,
+wells merge to 1 polygon. Magic ext2spice + Netgen LVS vs hand-source:
+  -> 'Netlists match uniquely' (11 devices, 10 nets); PMOS bulk=VPWR, NMOS bulk=VGND.
+  -> only a top-level PORT-declaration formality remains (block I/O labels not
+     declared as subckt pins; network matches). Not a connectivity error.
+Block DRC: DF.13_MV/DF.14_MV GONE (taps satisfy tap-distance). 6 residual
+  (NW.4x2, LPW.12x2, DV.2x2) are throwaway-tap-cell abutment-seam geometry,
+  to be fixed when building the real DRC-clean lsdl_tap_11t / endcap / fill cells.
+CONCLUSION: LSDL inverter is cell-DRC clean + device-level LVS clean; full bulk
+  connectivity closes under the standard 11T tap/filler row convention.

@@ -1,0 +1,48 @@
+name: lsdl_inv_x1
+library: lsdl_fd_sc_9t5v0
+form: basic
+drive: 1
+function: "!A"
+
+pins:
+  - {name: CLK,  direction: input,  is_clock: true}
+  - {name: A,    direction: input}
+  - {name: OUT,  direction: output}
+  - {name: VPWR, direction: power}
+  - {name: VGND, direction: ground}
+
+n_tree:
+  - id: dyn
+    expr: "A"
+    stack_height: 1
+
+sizing:
+  # Initial guesses — refined by Wave 0 characterization.
+  precharge_w_um: 1.0
+  foot_w_um: 0.8
+  header_w_um: 0.8
+  cut_feedback_w_um: 0.4
+  predriver_p_w_um: 0.6
+  predriver_n_w_um: 0.4
+  feedback_p_w_um: 0.2
+  feedback_n_w_um: 0.2
+  output_driver_p_w_um: 1.5
+  output_driver_n_w_um: 0.9
+  n_tree_w_um: 0.8
+
+worst_case_eval_vector:
+  inputs: {A: 1}
+
+characterization:
+  corners: [TT, SS, FF, SF, FS]
+  vdd_range_v: [4.75, 5.0, 5.25]
+  temperature_c: [-40, 25, 125]
+  mc_points: 100
+  glitch_threshold_pct: 10
+
+artifacts:
+  spice_source: ../cells/lsdl_basic/lsdl_inv_x1.spice
+  magic_layout: ../cells/lsdl_basic/lsdl_inv_x1.mag
+  liberty_out:  ../cells/lsdl_basic/lsdl_inv_x1.lib
+  lef_out:      ../cells/lsdl_basic/lsdl_inv_x1.lef
+  verilog_out:  ../cells/lsdl_basic/lsdl_inv_x1.v

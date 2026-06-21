@@ -1,0 +1,9 @@
+# Best LSDL inverter — 6 cell-level DRC (all PL.5_LV), LVS clean
+date: 2026-05-27T03:33Z
+command: TARGETVOLTAGE=5V TRACKS=11 DNWELL=False --placer smt
+DRC: 6 cell-level = PL.5a_LV(3)+PL.5b_LV(3); +4 chip-level tap rules (DF.13/14_LV)
+LVS: SUCCESS
+patches vs baseline: CO.6a M1-contact enc 40->60; implant bands (standalone _09);
+  LVPWELL clip out of NWELL; via1 landing-pad enc 40->70; DF.13/14_LV->chip-level in parse_drc
+remaining: PL.5 poly<->neighbor-COMP spacing 0.08um actual; needs 0.1um(LV)/0.3um(MV).
+  MV (post-DUALGATE) gap of 0.22um is a placement/pitch redesign in lclayout (long pole).

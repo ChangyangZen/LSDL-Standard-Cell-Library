@@ -1,0 +1,11 @@
+* cmos_nand2_x1 — static CMOS NAND2, GF180MCU 5V (same models as LSDL cells).
+* Sizing from vendor gf180mcu_fd_sc_mcu9t5v0__nand2_1: 2x nfet series 1.32/0.6,
+* 2x pfet parallel 1.645/0.5. Out = !(A1 & A2). Combinational (no clock).
+.SUBCKT cmos_nand2_x1 A1 A2 Out VPWR VGND
+* pulldown: 2 NMOS in series
+XN1 Out  A1 nint VGND nfet_05v0 W=1.32u  L=0.6u
+XN2 nint A2 VGND VGND nfet_05v0 W=1.32u  L=0.6u
+* pullup: 2 PMOS in parallel
+XP1 Out A1 VPWR VPWR pfet_05v0 W=1.645u L=0.5u
+XP2 Out A2 VPWR VPWR pfet_05v0 W=1.645u L=0.5u
+.ENDS cmos_nand2_x1

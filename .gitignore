@@ -1,0 +1,30 @@
+# --- Python / tooling environments (regenerable; never track) ---
+__pycache__/
+*.pyc
+.venv/
+venv/
+librecell/venv/
+librecell/out/
+
+# --- tool / PDK (external, not ours) ---
+# the GF180MCU PDK is installed separately (see versions.md); never vendored here
+**/pdk/
+gf180mcu*/
+
+# --- DRC / LVS / PnR run artifacts (regenerable) ---
+*.lyrdb
+drc_run*/
+**/baseline_*/          # lclayout enablement-validation runs (logs + lyrdb)
+*.drc.rpt
+
+# --- core dumps / debug / scratch ---
+core.*
+*_debug.gds
+*_debug.lef
+*_debug.mag
+*_debug.oas
+test_top.*
+
+# --- editor / OS ---
+.DS_Store
+*.swp

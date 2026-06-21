@@ -1,0 +1,9 @@
+# Git LFS — binary layout + doc formats kept out of the git object store so
+# the repo stays lean and text diffs stay readable. (*.gds *.oas are binary
+# layout; *.mag is Magic ASCII but tracked via LFS per library convention as a
+# build deliverable; *.pdf/*.png are binary docs.)
+*.gds   filter=lfs diff=lfs merge=lfs -text
+*.oas   filter=lfs diff=lfs merge=lfs -text
+*.mag   filter=lfs diff=lfs merge=lfs -text
+*.pdf   filter=lfs diff=lfs merge=lfs -text
+*.png   filter=lfs diff=lfs merge=lfs -text

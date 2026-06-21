@@ -1,0 +1,19 @@
+LSDL Standard-Cell Library for GF180MCU
+Copyright 2026 Changyang Zen
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This work builds on / uses:
+- GF180MCU Open PDK (GlobalFoundries / Google / efabless), Apache-2.0 — used as
+  the target technology; not redistributed here.
+- LibreCell (lclayout, Z3 SMT), AGPL-3.0 — used as a TOOL to generate cell
+  layouts. The generated cells are this project's own work, not a derivative of
+  the tool. The community GF180MCU lclayout enablement (LibreSilicon) was adapted
+  under librecell/tech_gf180mcu/ with documented patches.
+
+Cell architecture follows:
+- Belluomini et al., "Limited switch dynamic logic circuits for high-speed
+  low-power circuit design," IBM J. Res. & Dev. 50(2/3), 2006.
+- Sivagnaname et al., "Wide Limited Switch Dynamic Logic Circuit
+  Implementations," 2006.
+(These papers are NOT redistributed in this repository.)
