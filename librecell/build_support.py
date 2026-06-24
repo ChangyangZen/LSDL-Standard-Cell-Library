@@ -20,7 +20,8 @@ import sys
 import pya
 
 NWELL=(21,0); COMP=(22,0); PPLUS=(31,0); NPLUS=(32,0); MCON=(33,0)
-M1=(34,0); DUALG=(55,0); BNDRY=(63,0); FET5V=(112,1); LVPWELL=(204,0)
+M1=(34,0); VIA1=(35,0); M2=(36,0)
+DUALG=(55,0); BNDRY=(63,0); FET5V=(112,1); LVPWELL=(204,0)
 
 H=6.16
 NWELL_Y=(2.22,6.42); LVPW_Y=(0.0,2.22)
@@ -62,21 +63,27 @@ def build_cell(ly,name):
         _box(ly,c,M1,   0.50,-0.24,1.18,1.20)
     elif name=='lsdl_antenna_11t':
         # Antenna diode (CORE ANTENNACELL): N+ diode in the p-well tied to the
-        # I pin (cathode), anode = p-well -> VGND via row taps. repair_antennas
-        # inserts these on long gate nets so etch charge bleeds through the diode
-        # instead of stressing the gate oxide. Geometry mirrors the proven tap
-        # cell: upper N+ nwell tap -> VPWR (well bias); lower N+ swapped from the
-        # tap's P+ (same DRC-clean boxes), M1 reduced to an isolated I pin.
+        # I pin (cathode), anode = p-well -> VGND via row taps.
+        #
+        # Row-tileable implant: the lower N+ is a FULL-WIDTH band
+        # [0,1.68]x[0.10,1.62] that matches the std-cell NMOS N+ band bottom
+        # and clears the VGND rail (top 0.69) — this merges into the continuous
+        # row N+ when abutted, closing NP.2. (The original narrow-island N+ left
+        # a 0.14um protrusion that notched at every diode left edge.)
         # Upper N+ tap in nwell -> VPWR (biases local nwell; copied from tap)
         _box(ly,c,COMP, 0.50,4.70,1.18,5.50)
         _box(ly,c,NPLUS,0.34,4.54,1.34,5.66)
         _box(ly,c,MCON, 0.73,4.96,0.95,5.18)
         _box(ly,c,M1,   0.50,4.90,1.18,6.40)
-        # Lower N+ diode in p-well -> I pin (NPLUS where the tap had PPLUS)
+        # Lower N+ diode in p-well -> I pin (full-width row band)
         _box(ly,c,COMP, 0.50,0.66,1.18,1.46)
-        _box(ly,c,NPLUS,0.34,0.50,1.34,1.62)
+        _box(ly,c,NPLUS,0.00,0.10,1.68,1.62)    # full-width band (was 0.34,0.50,1.34,1.62)
         _box(ly,c,MCON, 0.73,0.98,0.95,1.20)
         _box(ly,c,M1,   0.50,0.94,1.18,1.46)      # I pin (clears VGND rail top 0.69)
+        # M2 access pin + Via1 — standard signal router is M2-M5; without an
+        # M2 port the diode floats (M1-only pin unreachable → adiodes=0).
+        _box(ly,c,VIA1, 0.71,1.07,0.97,1.33)
+        _box(ly,c,M2,   0.62,0.94,1.06,1.46)      # track-aligned (x=0.84)
     return c
 
 def cmd_cells(outdir):
