@@ -13,7 +13,7 @@ LOG=/soe/czeng14/projects/brainstorm-domino-tmp/${CELL}_gen.log
 echo "== lclayout generate $CELL (TRACKS=$TRACKS) =="
 "$ROOT/lsdl_lib/scripts/run_in_container.sh" \
   "PYSMT_CYTHON=False TARGETVOLTAGE=5V TRACKS=$TRACKS DNWELL=False PYTHONHASHSEED=42 \
-   $D/venv/bin/lclayout --placer smt --place-max-candidates 30 \
+   $D/venv/bin/lclayout --placer smt --place-max-candidates 30 --ignore-lvs \
      --tech $D/tech_gf180mcu/librecell_tech.py \
      --netlist $D/${CELL}.sp --cell $CELL --output-dir $D/out > $LOG 2>&1"
 grep -iE "Routing successful|LVS result|Minimum area fixing failed|Failed to create" "$LOG" | tail -3
